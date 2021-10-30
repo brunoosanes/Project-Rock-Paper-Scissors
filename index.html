@@ -1,12 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header">ROCK | PAPER | SCISSORS</div>
+    </header>
+
+    <section class="content">
+      <section>
+        <p class="score"><button class="playAgainBtn">PLAY AGAIN</button></p>
+        <section class="players">
+          <section class="player">
+            <p>You:</p>
+            <img
+              class="currentPlayerSelectionImg"
+              src="img/question-mark.jpg"
+            />
+          </section>
+          <section class="scorePlacar outer">
+            <section class="scorePlacar inner">
+              <p class="playerScore">0</p>
+              <p>VS</p>
+              <p class="computerScore">0</p>
+            </section>
+            <p class='message'>Choose your weapon below!</p>
+          </section>
+          <section class="computer">
+            <p>Computer:</p>
+            <img
+              class="currentComputerSelectionImg"
+              src="img/question-mark.jpg"
+            />
+          </section>
+        </section>
+      </section>
+
+      <section class="btns">
+        <button id="rock"><img src="img/ROCK.svg" /></button>
+        <button id="paper"><img src="img/PAPER.svg" /></button>
+        <button id="scissors"><img src="img/SCISSORS.svg" /></button>
+      </section>
+    </section>
+
+    <footer class="footer">Copyright © 2021 Bruno Osanes</footer>
+
     <script src="/script/logic.js"></script>
-</body>
+  </body>
 </html>

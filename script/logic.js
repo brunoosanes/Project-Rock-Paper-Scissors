@@ -1,169 +1,189 @@
-/* Rock Paper Scissors
-    objective: to create a game which the player can input his choice and see if it beats or not the computers choice
-    . create variables for rock, paper and scissors
-    . ask for user input
-    . store user input in a variable in order to compare it with pcs choice later
-    . generate pc choice
-    . store pc choice in a variable
-    . create a function that checks if choices are equal or diferent, and if different compare which one wins
-    . display the result
-    . run a function that plays 5 round and keep track of the game score and show a message about the game result at the end
-    */
-   
-    // create variables for player and computer selection
-    let playerSelection;
-    let computerSelection;
+let playerScore = Number(document.querySelector(".playerScore").textContent);
+let computerScore = Number(
+  document.querySelector(".computerScore").textContent
+);
+console.log(playerScore);
 
-    // create a function that picks randomly either rock, paper or scissors...
-    function computerPlay() {
-        let number = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-        if (number === 1) {
-            return 'rock'
-        } else if (number === 2) {
-            return 'paper'
-        } else {
-            return 'scissors'
-        }
-    }
-    
-    // stores the computer choice 
-    computerSelection = computerPlay();
+// storing the player choice
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorsButton = document.querySelector("#scissors");
 
-    // console.log just to check if everything is displaying correctly
-    console.log('Player: ' + playerSelection)
-    console.log('Computer: ' + computerSelection)
+function playerSelectionRock() {
+  playerSelection = "ROCK";
+  game();
+}
+function playerSelectionPaper() {
+  playerSelection = "PAPER";
+  game();
+}
+function playerSelectionScissors() {
+  playerSelection = "SCISSORS";
+  game();
+}
 
-    // create a function that compares human input with pc's random choice and return the result (win, draw, loss...)
-    function gameResult(playerSelection, computerSelection) {
-        if (playerSelection === computerSelection) {
-            return `It's a draw!`
-        } else if (playerSelection === 'rock' && computerSelection === 'scissors') {
-            return `Congratulations, you won!`
-        } else if (playerSelection === 'rock' && computerSelection === 'paper') {
-            return 'You lost!'
-        } else if (playerSelection === 'paper' && computerSelection === 'rock') {
-            return 'Congratulations, you won!'
-        } else if (playerSelection === 'paper' && computerSelection === 'scissors') {
-            return 'You lost!'
-        } else if (playerSelection === 'scissors' && computerSelection === 'rock') {
-            return 'You lost!'
-        } else if (playerSelection === 'scissors' && computerSelection === 'paper') {
-            return 'Congratulations, you won!'
-        } else {
-            return 'Please enter a valid choice!'
-        }
-    }
+let playerSelection = "";
+rockButton.addEventListener("click", playerSelectionRock);
+paperButton.addEventListener("click", playerSelectionPaper);
+scissorsButton.addEventListener("click", playerSelectionScissors);
 
+// generating computer choice
+let computerSelection = "";
+function computerPlay() {
+  computerSelection = Math.floor(Math.random() * 3);
+  switch (computerSelection) {
+    case 0:
+      computerSelection = "ROCK";
+      return computerSelection;
+    case 1:
+      computerSelection = "PAPER";
+      return computerSelection;
+    case 2:
+      computerSelection = "SCISSORS";
+      return computerSelection;
+  }
+}
 
-    // create a function game() to play a 5 round game that returns the current score of the game and reports a winner or loser msg at the end
+// playing one round
+let message = document.querySelector('.message');
+function playRound(playerSelection, computerSelection) {
+  if (playerSelection === computerSelection) {
+    roundWinner = "tie";
+    message.classList.add('tieRound')
+    message.classList.remove('wonRound')
+    message.classList.remove('lostRound')
+    message.textContent = 'I\'s a tie!'
+    return roundWinner;
+  }
+  if (
+    (playerSelection === "ROCK" && computerSelection === "SCISSORS") ||
+    (playerSelection === "PAPER" && computerSelection === "ROCK") ||
+    (playerSelection === "SCISSORS" && computerSelection === "PAPER")
+  ) {
+    roundWinner = "player";
+    message.classList.add('wonRound')
+    message.classList.remove('tieRound')
+    message.classList.remove('lostRound')
+    message.textContent = 'You won this round :)'
+    return roundWinner;
+  }
+  if (
+    (computerSelection === "ROCK" && playerSelection === "SCISSORS") ||
+    (computerSelection === "PAPER" && playerSelection === "ROCK") ||
+    (computerSelection === "SCISSORS" && playerSelection === "PAPER")
+  ) {
+    roundWinner = "computer";
+    message.classList.add('lostRound')
+    message.classList.remove('tieRound')
+    message.classList.remove('wonRound')
+    message.textContent = 'Computer won this round :('
+    return roundWinner;
+  }
+}
 
-    function game() {
+// storing score based on round winner
+function score() {
+  if (roundWinner === "player") {
+    playerScore += 1;
+    document.querySelector(".playerScore").textContent = playerScore;
+  } else if (roundWinner === "computer") {
+    computerScore += 1;
+    document.querySelector(".computerScore").textContent = computerScore;
+  } else {
+  }
+}
 
-        let playerScore = 0;
-        let computerScore = 0;
-        let result = `You ${playerScore} vs ${computerScore} Computer.`
+// update current score image to current selection
+function updateImgs() {
+  let currentPlayerSelectionImg = document.querySelector(
+    ".currentPlayerSelectionImg"
+  );
+  let currentComputerSelectionImg = document.querySelector(
+    ".currentComputerSelectionImg"
+  );
+  document.querySelector(".currentPlayerSelectionImg").src =
+    currentPlayerSelectionImg.src.replace(
+      currentPlayerSelectionImg.src,
+      `img/${playerSelection}.svg`
+    );
+  currentComputerSelectionImg.src = currentComputerSelectionImg.src.replace(
+    currentComputerSelectionImg.src,
+    `img/${computerSelection}.svg`
+  );
+}
+// function that plays the game once the player click one of the 3 buttons
+function removeEventListeners() {
+  rockButton.removeEventListener('click', playerSelectionRock)
+  paperButton.removeEventListener('click', playerSelectionPaper)
+  scissorsButton.removeEventListener('click',playerSelectionScissors)
+}
+function game() {
+  computerPlay();
+  playRound(playerSelection, computerSelection);
+  score();
+  updateImgs();
 
-
-        playerSelection = prompt('Chose between Rock, Paper or Scissors').toLowerCase();
-        computerPlay();
-        computerSelection = computerPlay();
-        alert(`Computer chose ${computerSelection}. ${gameResult(playerSelection, computerSelection)}`);
-        if (gameResult(playerSelection, computerSelection) === 'Congratulations, you won!') {
-            playerScore = playerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === 'You lost!') {
-            computerScore = computerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === `It's a draw!`){
-            playerScore = playerScore + 1;
-            computerScore = computerScore + 1;
-        } else {
-            playerScore = playerScore + 0;
-            computerScore = computerScore + 0;
-        }
-        alert(`You ${playerScore} vs ${computerScore} Computer.`);
-
-
-        playerSelection = prompt('Chose between Rock, Paper or Scissors').toLowerCase();
-        computerPlay();
-        computerSelection = computerPlay();
-        alert(`Computer chose ${computerSelection}. ${gameResult(playerSelection, computerSelection)}`);
-        if (gameResult(playerSelection, computerSelection) === 'Congratulations, you won!') {
-            playerScore = playerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === 'You lost!') {
-            computerScore = computerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === `It's a draw!`){
-            playerScore = playerScore + 1;
-            computerScore = computerScore + 1;
-        } else {
-            playerScore = playerScore + 0;
-            computerScore = computerScore + 0;
-        }
-        alert(`You ${playerScore} vs ${computerScore} Computer.`);
-
-        playerSelection = prompt('Chose between Rock, Paper or Scissors').toLowerCase();
-        computerPlay();
-        computerSelection = computerPlay();
-        alert(`Computer chose ${computerSelection}. ${gameResult(playerSelection, computerSelection)}`);
-        if (gameResult(playerSelection, computerSelection) === 'Congratulations, you won!') {
-            playerScore = playerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === 'You lost!') {
-            computerScore = computerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === `It's a draw!`){
-            playerScore = playerScore + 1;
-            computerScore = computerScore + 1;
-        } else {
-            playerScore = playerScore + 0;
-            computerScore = computerScore + 0;
-        }
-        alert(`You ${playerScore} vs ${computerScore} Computer.`);
-
-
-        playerSelection = prompt('Chose between Rock, Paper or Scissors').toLowerCase();
-        computerPlay();
-        computerSelection = computerPlay();
-        alert(`Computer chose ${computerSelection}. ${gameResult(playerSelection, computerSelection)}`);
-        if (gameResult(playerSelection, computerSelection) === 'Congratulations, you won!') {
-            playerScore = playerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === 'You lost!') {
-            computerScore = computerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === `It's a draw!`){
-            playerScore = playerScore + 1;
-            computerScore = computerScore + 1;
-        } else {
-            playerScore = playerScore + 0;
-            computerScore = computerScore + 0;
-        }
-        alert(`You ${playerScore} vs ${computerScore} Computer.`);
-
-
-        playerSelection = prompt('Chose between Rock, Paper or Scissors').toLowerCase();
-        computerPlay();
-        computerSelection = computerPlay();
-        alert(`Computer chose ${computerSelection}. ${gameResult(playerSelection, computerSelection)}`);
-        if (gameResult(playerSelection, computerSelection) === 'Congratulations, you won!') {
-            playerScore = playerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === 'You lost!') {
-            computerScore = computerScore + 1;
-        } else if (gameResult(playerSelection, computerSelection) === `It's a draw!`){
-            playerScore = playerScore + 1;
-            computerScore = computerScore + 1;
-        } else {
-            playerScore = playerScore + 0;
-            computerScore = computerScore + 0;
-        }
-        if (playerScore > computerScore) {
-            alert(`You ${playerScore} vs ${computerScore} Computer.` + ' Congratulations, you beat the machine!');
-        } else if (playerScore < computerScore ) {
-            alert(`You ${playerScore} vs ${computerScore} Computer.` + ' I\'m sorry, you lost. Did you really thought you could beat a machine?!');
-        } else {
-            alert(`You ${playerScore} vs ${computerScore} Computer.` + ' It\'s a draw! You\'re good, but not good enought to beat a machine.');
-        }
+  if (playerScore === 5) {
+    message.classList.remove('wonRound')
+    message.classList.remove('tieRound')
+    message.classList.remove('lostRound')
+    message.classList.remove('lostGame')
+    message.classList.add('wonGame')
+    message.textContent = 'Congratulations, you did it!'
+    removeEventListeners()
+  }
+  if (computerScore === 5) {
+    message.classList.remove('wonRound')
+    message.classList.remove('tieRound')
+    message.classList.remove('lostRound')
+    message.classList.remove('wonGame')
+    message.classList.add('lostGame')
+    message.textContent = 'You got beat by the machine...'
+    removeEventListeners()
+  }
+  console.log(playerSelection);
+  console.log(computerSelection);
+  console.log(roundWinner);
+  console.log(playerScore);
+  console.log(computerScore);
+}
 
 
+// restartGame sets score back to zero and replace question-mark images
+playAgainBtn = document.querySelector('.playAgainBtn');
+playAgainBtn.addEventListener('click', restartGame)
 
-    
+function addEventListeners() {
+  rockButton.addEventListener('click', playerSelectionRock)
+  paperButton.addEventListener('click', playerSelectionPaper)
+  scissorsButton.addEventListener('click',playerSelectionScissors)
+}
+function restartGame() {
+  document.querySelector(".playerScore").textContent = 0;
+  document.querySelector(".computerScore").textContent = 0;
+  playerScore = 0;
+  computerScore = 0;
+  let currentPlayerSelectionImg = document.querySelector(
+    ".currentPlayerSelectionImg"
+  );
+  let currentComputerSelectionImg = document.querySelector(
+    ".currentComputerSelectionImg"
+  );
+  document.querySelector(".currentPlayerSelectionImg").src =
+    currentPlayerSelectionImg.src.replace(
+      currentPlayerSelectionImg.src,
+      'img/question-mark.jpg'
+    );
+  currentComputerSelectionImg.src = currentComputerSelectionImg.src.replace(
+    currentComputerSelectionImg.src,
+    'img/question-mark.jpg'
+  );
+  message.classList.remove('wonRound')
+  message.classList.remove('tieRound')
+  message.classList.remove('lostRound')
+  message.classList.remove('wonGame')
+  message.classList.remove('lostGame')
+  message.textContent = 'Choose your weapon below!'
+  addEventListeners()
+}
 
-    }
-
-    // run the function game()
-
-    game();
