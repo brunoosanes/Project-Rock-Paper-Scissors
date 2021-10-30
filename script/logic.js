@@ -2,7 +2,6 @@ let playerScore = Number(document.querySelector(".playerScore").textContent);
 let computerScore = Number(
   document.querySelector(".computerScore").textContent
 );
-console.log(playerScore);
 
 // storing the player choice
 const rockButton = document.querySelector("#rock");
